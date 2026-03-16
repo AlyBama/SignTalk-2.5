@@ -8,17 +8,17 @@ from gtts import gTTS
 import os
 from dotenv import load_dotenv
 
-# --- إضافة مكتبات Firebase ---
+# --- Adding Firebase libraries ---
 import firebase_admin
 from firebase_admin import credentials, firestore
 
 load_dotenv()
 api_key = os.getenv("API_KEY")
 
-# --- تهيئة Firebase (Spark Plan - بدون فيزا) ---
+# --- Initialize Firebase ---
 if not firebase_admin._apps:
     try:
-        # تأكد من وجود ملف JSON الصلاحيات بجانب الكود
+        # Ensure the credentials JSON file is in the project directory
         cred = credentials.Certificate("firebase_credentials.json")
         firebase_admin.initialize_app(cred)
     except Exception:
@@ -27,7 +27,7 @@ if not firebase_admin._apps:
 db = firestore.client() if firebase_admin._apps else None
 
 def save_to_cloud(action, word, confidence="N/A"):
-    """حفظ النتائج في Firestore لإثبات استخدام Google Cloud للمحكمين"""
+    """Save results to Firestore to demonstrate Google Cloud usage for evaluators"""
     if db:
         try:
             db.collection('SignTalk_Logs').add({
@@ -39,10 +39,10 @@ def save_to_cloud(action, word, confidence="N/A"):
         except:
             pass
 
-# ---------------- الكاش وتعديل مسار الفيديوهات ----------------
+# ---------------- Caching and video path setup ----------------
 @st.cache_resource
 def get_video_clips():
-    """تحميل الفيديوهات من فولدر video"""
+    """Load videos from the video folder"""
     return {
         "FINE": "video/fine.mp4",
         "FORGET": "video/forget.mp4",
@@ -86,7 +86,7 @@ def load_video_bytes(video_path):
             return f.read()
     return None
 
-# --- إعدادات الصفحة ---
+# --- Page configuration ---
 st.set_page_config(page_title="SignTalk 2.5 Pro Max", layout="wide")
 st.title("🤟 SignTalk 2.5 Pro Max")
 st.subheader("Universal Sign Language Translator - Two Way")
@@ -148,7 +148,7 @@ if st.button("🎬 Start Sign (DroidCam)"):
             conf = full_res.split('|')[1].strip() if '|' in full_res else "N/A"
             
             st.session_state.history.append(f"Sign → {word} ({conf})")
-            save_to_cloud("Sign to Speech", word, conf) # الحفظ في السحابة
+            save_to_cloud("Sign to Speech", word, conf) # Save to cloud
             
             status_placeholder.success(f"✅ Result: {word}")
             confidence_placeholder.metric("Confidence", conf)
@@ -172,7 +172,7 @@ with tab1:
                 v_bytes = load_video_bytes(video_clips[word])
                 if v_bytes:
                     st.success(f"✅ Result: {word}")
-                    # تصغير حجم الفيديو وعرضه في المنتصف
+                    # Reduce video size and display it in the center
                     c1, c2, c3 = st.columns([1, 2, 1])
                     with c2:
                         st.video(v_bytes, format="video/mp4", autoplay=True)
@@ -184,10 +184,10 @@ with tab1:
 with tab2:
     audio_input = st.audio_input("Speak now")
     if audio_input:
-        # إضافة زر لتأكيد بدء التحليل وتجنب إرسال بيانات فارغة
+        # Add a button to confirm analysis start and avoid sending empty data
         if st.button("Analyze Speech"):
             with st.spinner("Gemini is analyzing speech..."):
-                # استخدام getvalue بدلاً من read لحل مشكلة الـ Empty Bytes
+                # Use getvalue instead of read to solve Empty Bytes issue
                 audio_bytes = audio_input.getvalue()
                 mime_type = audio_input.type or "audio/wav"
                 word = analyze_speech_with_gemini(audio_bytes, mime_type)
@@ -196,7 +196,7 @@ with tab2:
                     v_bytes = load_video_bytes(video_clips[word])
                     if v_bytes:
                         st.success(f"✅ Result: {word}")
-                        # تصغير حجم الفيديو وعرضه في المنتصف
+                        # Reduce video size and display it in the center
                         c1, c2, c3 = st.columns([1, 2, 1])
                         with c2:
                             st.video(v_bytes, format="video/mp4", autoplay=True)
