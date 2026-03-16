@@ -64,7 +64,7 @@ def get_video_clips():
 def analyze_text_with_gemini(text):
     client = genai.Client(api_key=api_key)
     response = client.models.generate_content(
-        model="gemini-2.5-flash", # رجعناها 2.5 زي ما طلبت يا بطل
+        model="gemini-2.5-flash",
         contents=[f"Analyze this text and convert it to one of these exact ASL signs only: FINE, FORGET, GO, HAPPY, LIKE, MORE, NEED, PLEASE, RIGHT, SAD, THANK YOU, WANT, WRONG, YES. Return the matching word only.", text]
     )
     return response.text.strip().upper()
@@ -74,7 +74,7 @@ def analyze_speech_with_gemini(audio_bytes, mime_type):
     client = genai.Client(api_key=api_key)
     part = types.Part.from_bytes(data=audio_bytes, mime_type=mime_type)
     response = client.models.generate_content(
-        model="gemini-2.5-flash", # رجعناها 2.5
+        model="gemini-2.5-flash",
         contents=["Analyze this speech and convert it to one of these exact ASL signs only: FINE, FORGET, GO, HAPPY, LIKE, MORE, NEED, PLEASE, RIGHT, SAD, THANK YOU, WANT, WRONG, YES. Return the matching word only.", part]
     )
     return response.text.strip().upper()
@@ -166,30 +166,48 @@ tab1, tab2 = st.tabs(["✍️ Type", "🎤 Speak"])
 with tab1:
     text_input = st.text_input("Type the word")
     if st.button("Analyze Text"):
-        word = analyze_text_with_gemini(text_input)
-        if word in video_clips:
-            v_bytes = load_video_bytes(video_clips[word])
-            if v_bytes:
-                st.video(v_bytes, format="video/mp4", autoplay=True)
-                st.session_state.history.append(f"Text → {word}")
-                save_to_cloud("Text to Sign", word)
-        else: st.error("Not supported")
+        with st.spinner("Analyzing text..."):
+            word = analyze_text_with_gemini(text_input)
+            if word in video_clips:
+                v_bytes = load_video_bytes(video_clips[word])
+                if v_bytes:
+                    st.success(f"✅ Result: {word}")
+                    # تصغير حجم الفيديو وعرضه في المنتصف
+                    c1, c2, c3 = st.columns([1, 2, 1])
+                    with c2:
+                        st.video(v_bytes, format="video/mp4", autoplay=True)
+                    st.session_state.history.append(f"Text → {word}")
+                    save_to_cloud("Text to Sign", word)
+            else: 
+                st.error("Not supported")
 
 with tab2:
     audio_input = st.audio_input("Speak now")
     if audio_input:
-        word = analyze_speech_with_gemini(audio_input.read(), audio_input.type or "audio/wav")
-        if word in video_clips:
-            v_bytes = load_video_bytes(video_clips[word])
-            if v_bytes:
-                st.video(v_bytes, format="video/mp4", autoplay=True)
-                st.session_state.history.append(f"Speech → {word}")
-                save_to_cloud("Speech to Sign", word)
-        else: st.error(f"Word ({word}) not supported")
+        # إضافة زر لتأكيد بدء التحليل وتجنب إرسال بيانات فارغة
+        if st.button("Analyze Speech"):
+            with st.spinner("Gemini is analyzing speech..."):
+                # استخدام getvalue بدلاً من read لحل مشكلة الـ Empty Bytes
+                audio_bytes = audio_input.getvalue()
+                mime_type = audio_input.type or "audio/wav"
+                word = analyze_speech_with_gemini(audio_bytes, mime_type)
+                
+                if word in video_clips:
+                    v_bytes = load_video_bytes(video_clips[word])
+                    if v_bytes:
+                        st.success(f"✅ Result: {word}")
+                        # تصغير حجم الفيديو وعرضه في المنتصف
+                        c1, c2, c3 = st.columns([1, 2, 1])
+                        with c2:
+                            st.video(v_bytes, format="video/mp4", autoplay=True)
+                        st.session_state.history.append(f"Speech → {word}")
+                        save_to_cloud("Speech to Sign", word)
+                else: 
+                    st.error(f"Word ({word}) not supported")
 
 with st.sidebar:
     st.header("📜 History")
     for item in reversed(st.session_state.history):
         st.write(f"• {item}")
 
-st.caption("SignTalk 2.5 | Gemini Live Agent Challenge")حغ
+st.caption("SignTalk 2.5 | Gemini Live Agent Challenge")

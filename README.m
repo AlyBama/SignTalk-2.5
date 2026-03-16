@@ -1,193 +1,192 @@
-# 🤟 SignTalk 2.5 Pro Max
+🤟 SignTalk 2.5 Pro Max
 
-**Universal Two-Way Sign Language Translator powered by AI**
+AI-Powered Two-Way Sign Language Translator
 
-SignTalk is an AI-powered application that translates between **American Sign Language (ASL)** and **spoken or written English** in real time using **computer vision and generative AI**.
+SignTalk is an accessibility-focused AI application that enables communication between deaf and hearing communities by translating between American Sign Language (ASL) and spoken or written English.
 
-The system works in **two directions**:
+The system uses Google Gemini models and Google Cloud services to analyze text, speech, and video inputs and convert them into understandable communication formats.
 
-* ✋ **Sign → Speech & Text**
-* 🗣 **Speech/Text → Sign Video**
+This project was built for the
+Gemini Live Agent Challenge.
 
-This makes communication easier between **deaf and hearing people**.
+🚀 Features
+1️⃣ Sign → Speech + Text
 
----
+Users perform a sign gesture using a webcam or DroidCam.
 
-# 🚀 Features
+The system:
 
-### 1️⃣ Sign → Speech + Text
+Records a short video
 
-* Capture sign language using webcam or DroidCam
-* AI analyzes the sign using **Gemini Vision**
-* Returns:
+Sends it to the Gemini 2.5 Flash model
 
-  * Detected word
-  * Confidence level
-* Converts the result into **spoken audio**
+Detects the ASL word
+
+Converts the result to speech using Text-to-Speech
 
 Example output:
 
-```
 Result: HAPPY
 Confidence: 92%
-```
+2️⃣ Text → Sign Language
 
----
+Users type a word in English.
 
-### 2️⃣ Text → Sign Language
-
-Users type an English word and the system converts it into a **sign language video**.
+The AI analyzes the text and displays the corresponding ASL sign video.
 
 Example:
 
-```
 Input: THANK YOU
 Output: Sign video
-```
-
----
-
-### 3️⃣ Speech → Sign Language
+3️⃣ Speech → Sign Language
 
 Users can speak directly into the microphone.
 
-The AI:
+The system:
 
-1. Analyzes speech
-2. Detects the intended word
-3. Displays the corresponding **ASL video**
+Captures speech
 
----
+Sends audio to Gemini
 
-# 🧠 AI Technologies Used
+Detects the intended word
 
-* Generative AI (Gemini)
-* Computer Vision
-* Speech Processing
-* Streamlit interactive UI
+Displays the corresponding sign video
 
----
+☁️ Google Cloud Integration
 
-# 🛠 Tech Stack
+SignTalk integrates with
+Google Cloud
+using Firestore to store translation logs.
 
-* Python
-* Streamlit
-* OpenCV
-* Google Generative AI
-* gTTS (Google Text-to-Speech)
-* python-dotenv
+Each interaction is recorded in the cloud including:
 
----
+action type
 
-# 📂 Project Structure
+detected word
 
-```
-SignTalk
+confidence score
+
+timestamp
+
+This demonstrates real cloud-based AI application architecture.
+
+🧠 AI Technologies Used
+
+Gemini 2.5 Flash
+
+Google GenAI SDK
+
+Computer Vision
+
+Speech Processing
+
+Streamlit interactive interface
+
+🛠 Tech Stack
+
+Python
+
+Streamlit
+
+OpenCV
+
+Google Generative AI
+
+Firebase Firestore
+
+gTTS (Google Text-to-Speech)
+
+python-dotenv
+
+📂 Project Structure
+SignTalk-2.5
 │
 ├── app.py
-├── fine.mp4
-├── forget.mp4
-├── go.mp4
-├── happy.mp4
-├── like.mp4
-├── more.mp4
-├── need.mp4
-├── please.mp4
-├── right.mp4
-├── sad.mp4
-├── thank_you.mp4
-├── want.mp4
-├── wrong.mp4
-├── yes.mp4
 │
+├── video/
+│   ├── fine.mp4
+│   ├── forget.mp4
+│   ├── go.mp4
+│   ├── happy.mp4
+│   ├── like.mp4
+│   ├── more.mp4
+│   ├── need.mp4
+│   ├── please.mp4
+│   ├── right.mp4
+│   ├── sad.mp4
+│   ├── thank_you.mp4
+│   ├── want.mp4
+│   ├── wrong.mp4
+│   └── yes.mp4
+│
+├── firebase_credentials.json
 ├── requirements.txt
 ├── .gitignore
 └── README.md
-```
-
----
-
-# ⚙️ Installation
+⚙️ Installation
 
 Clone the repository:
 
-```bash
-git clone https://github.com/AlyBama/SignTalk.git
-cd SignTalk
-```
+git clone https://github.com/AlyBama/SignTalk-2.5
+cd SignTalk-2.5
 
 Install dependencies:
 
-```bash
 pip install -r requirements.txt
-```
+🔑 Environment Variables
 
----
+Create a .env file:
 
-# 🔑 Environment Variables
+API_KEY=your_google_gemini_api_key
 
-Create a `.env` file in the project folder:
+⚠️ Do NOT upload .env to GitHub.
 
-```
-API_KEY=your_google_api_key
-```
-
-⚠️ Never upload the `.env` file to GitHub.
-
----
-
-# ▶️ Run the App
-
-```bash
+▶️ Run the Application
 streamlit run app.py
-```
 
-The app will open in your browser.
+The application will open in your browser.
 
----
+📸 Demo Workflow
+Sign → Speech
 
-# 📸 Demo Workflow
+Perform a sign gesture
 
-1️⃣ Perform a sign using your camera
-2️⃣ AI analyzes the video
-3️⃣ The detected word is spoken aloud
+Gemini analyzes the video
 
-OR
+The detected word is spoken aloud
 
-1️⃣ Speak a word
-2️⃣ AI detects it
-3️⃣ Corresponding sign video appears
+Speech → Sign
 
----
+Speak a word
 
-# 🌍 Vision
+Gemini identifies the word
 
-SignTalk aims to reduce communication barriers between **deaf and hearing communities** by making sign language translation **accessible, fast, and AI-powered**.
+The corresponding ASL video appears
 
----
+Text → Sign
 
-# 🏆 Built For
+Type a word
 
-AI innovation challenges such as:
+AI maps it to a sign language video
 
-* Gemini AI Challenge
-* AI Hackathons
-* Accessibility Technology Projects
+🌍 Vision
 
----
+SignTalk aims to make communication more inclusive by leveraging AI and cloud technologies to bridge the gap between sign language users and spoken language users.
 
-# 👨‍💻 Developer
+👨‍💻 Developer
 
-**Aly Helmy**
+Aly Helmy
 
-GitHub:
+GitHub
 https://github.com/AlyBama
 
----
+Project Repository
+https://github.com/AlyBama/SignTalk-2.5
 
-# ⭐ Support
+⭐ Support
 
 If you like this project:
 
 ⭐ Star the repository
 🤝 Share it with others
+Built for Gemini Live Agent Challenge 2026
