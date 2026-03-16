@@ -9,14 +9,6 @@ The system uses Google Gemini models and Google Cloud services to analyze text, 
 This project was built for the
 Gemini Live Agent Challenge.
 
-## 📸 Screenshots
-
-| | |
-|:---:|:---:|
-| ![Demo 1](assets/demo1.png) | ![Demo 2](assets/demo2.png) |
-| *Demo 1* | *Demo 2* |
-| ![Demo 3](assets/demo3.png) | ![Demo 4](assets/demo4.png) |
-| *Demo 3* | *Demo 4* |
 
 🚀 Features
 1️⃣ Sign → Speech + Text
