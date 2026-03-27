@@ -102,6 +102,7 @@ python-dotenv
 
 📂 Project Structure
 
+```
 SignTalk-2.5
 │
 ├── app.py
@@ -126,7 +127,9 @@ SignTalk-2.5
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+
 ⚙️ Installation
+```
 
 Clone the repository:
 
