@@ -178,6 +178,8 @@ SignTalk aims to make communication more inclusive by leveraging AI and cloud te
 
 Aly Helmy
 
+Video demo link : https://vimeo.com/1173926970?share=copy&fl=sv&fe=ci
+
 GitHub
 https://github.com/AlyBama
 
